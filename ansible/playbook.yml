@@ -1,0 +1,32 @@
+---
+- name: Install DevOps Tools on EC2 Host
+  hosts: tools_host
+  become: yes
+  tasks:
+    - name: Update apt repository cache
+      apt:
+        update_cache: yes
+
+    - name: Install Java 17, Docker, and Nagios
+      apt:
+        name:
+          - openjdk-17-jdk
+          - docker.io
+          - nagios4
+          - nagios-nrpe-plugin
+        state: present
+
+    - name: Start and enable Docker service
+      systemd:
+        name: docker
+        state: started
+        enabled: yes
+
+    - name: Run SonarQube Container
+      community.docker.docker_container:
+        name: sonarqube
+        image: sonarqube:lts-community
+        state: started
+        restart_policy: always
+        published_ports:
+          - "9000:9000"
