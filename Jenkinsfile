@@ -2,10 +2,11 @@ pipeline {
     agent any
 
     environment {
-        APP_NAME    = 'spring-petclinic'
-        PORT        = '8081'
-        SONAR_TOKEN = 'squ_701603421a1310485600536321f162225bb1f1ca'
-        SONAR_HOST  = "http" + "://44.192.118.8:9000"
+        APP_NAME              = 'spring-petclinic'
+        SONAR_TOKEN           = 'squ_701603421a1310485600536321f162225bb1f1ca'
+        SONAR_HOST            = "http://44.192.118.8:9000"
+        DOCKER_CREDENTIALS_ID = 'docker-hub-credentials'
+        DOCKER_IMAGE          = 'your-dockerhub-username/spring-petclinic'
     }
 
     stages {
@@ -17,7 +18,6 @@ pipeline {
 
         stage('Compile & Test') {
             steps {
-                echo 'Building and running tests...'
                 sh './mvnw clean test'
             }
         }
@@ -28,29 +28,16 @@ pipeline {
             }
         }
 
-        stage('Package') {
-            steps {
-                echo 'Packaging application into JAR...'
-                sh './mvnw package -DskipTests'
-            }
-        }
-
-        stage('Deploy Application') {
+        stage('Build & Push Docker Image') {
             steps {
                 script {
-                    echo 'Simulating Spring Petclinic Deployment...'
-                    echo "Application package successfully verified at: target/${APP_NAME}-4.0.0-SNAPSHOT.jar"
+                    docker.withRegistry('https://index.docker.io/v1/', "${DOCKER_CREDENTIALS_ID}") {
+                        def customImage = docker.build("${DOCKER_IMAGE}:${env.BUILD_ID}")
+                        customImage.push()
+                        customImage.push('latest')
+                    }
                 }
             }
-        }
-    }
-
-    post {
-        success {
-            echo 'Pipeline completed successfully!'
-        }
-        failure {
-            echo 'Pipeline failed. Check build logs for details.'
         }
     }
 }
