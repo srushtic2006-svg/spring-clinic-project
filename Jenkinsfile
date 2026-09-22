@@ -2,8 +2,9 @@ pipeline {
     agent any
 
     environment {
-        APP_NAME = 'spring-petclinic'
-        PORT     = '8081'
+        APP_NAME    = 'spring-petclinic'
+        PORT        = '8081'
+        SONAR_TOKEN = 'squ_701603421a1310485600536321f162225bb1f1ca'
     }
 
     stages {
@@ -22,11 +23,7 @@ pipeline {
 
         stage('SonarQube Analysis') {
             steps {
-                script {
-                    withSonarQubeEnv('SonarQube') {
-                        sh './mvnw org.sonarsource.scanner.maven:sonar-maven-plugin:sonar'
-                    }
-                }
+                sh "./mvnw org.sonarsource.scanner.maven:sonar-maven-plugin:sonar -Dsonar.host.url=http://100.48.6.125:9000 -Dsonar.token=${SONAR_TOKEN}"
             }
         }
 
