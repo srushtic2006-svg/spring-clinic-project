@@ -39,5 +39,20 @@ pipeline {
                 }
             }
         }
+
+        stage('Deploy to EC2') {
+            steps {
+                sshagent(['ec2-ssh-key']) {
+                    sh '''
+                        ssh -o StrictHostKeyChecking=no ubuntu@44.192.118.8 "
+                        docker pull slushyc/spring-petclinic:latest &&
+                        docker stop spring-petclinic-app || true &&
+                        docker rm spring-petclinic-app || true &&
+                        docker run -d --name spring-petclinic-app -p 8080:8080 slushyc/spring-petclinic:latest
+                        "
+                    '''
+                }
+            }
+        }
     }
 }
