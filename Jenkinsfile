@@ -1,10 +1,6 @@
 pipeline {
     agent any
 
-    tools {
-        maven 'Maven3'
-    }
-
     environment {
         SONAR_SERVER = 'SonarQube'
         APP_NAME     = 'spring-petclinic'
@@ -14,7 +10,7 @@ pipeline {
     stages {
         stage('Checkout') {
             steps {
-                git branch: 'main', url: 'https://github.com/srushtic2006-svg/spring-clinic-project.git'
+                git branch: 'develop', url: 'https://github.com/srushtic2006-svg/spring-clinic-project.git'
             }
         }
 
