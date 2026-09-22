@@ -5,7 +5,7 @@ pipeline {
         APP_NAME    = 'spring-petclinic'
         PORT        = '8081'
         SONAR_TOKEN = 'squ_701603421a1310485600536321f162225bb1f1ca'
-        SONAR_HOST  = "http" + "://100.48.6.125:9000"
+        SONAR_HOST  = "http" + "://44.192.118.8:9000"
     }
 
     stages {
