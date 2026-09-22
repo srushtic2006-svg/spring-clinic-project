@@ -2,9 +2,8 @@ pipeline {
     agent any
 
     environment {
-        SONAR_SERVER = 'SonarQube'
-        APP_NAME     = 'spring-petclinic'
-        PORT         = '8081'
+        APP_NAME = 'spring-petclinic'
+        PORT     = '8081'
     }
 
     stages {
@@ -24,8 +23,8 @@ pipeline {
         stage('SonarQube Analysis') {
             steps {
                 script {
-                    withSonarQubeEnv("${env.SONAR_SERVER}") {
-                        sh './mvnw sonar:sonar'
+                    withSonarQubeEnv('SonarQube') {
+                        sh './mvnw org.sonarsource.scanner.maven:sonar-maven-plugin:sonar'
                     }
                 }
             }
