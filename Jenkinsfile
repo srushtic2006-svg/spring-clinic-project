@@ -6,7 +6,7 @@ pipeline {
         SONAR_TOKEN           = 'squ_701603421a1310485600536321f162225bb1f1ca'
         SONAR_HOST            = "http://44.192.118.8:9000"
         DOCKER_CREDENTIALS_ID = 'docker-hub-credentials'
-        DOCKER_IMAGE          = 'YOUR_ACTUAL_USERNAME/spring-petclinic'
+        DOCKER_IMAGE          = 'slushyc/spring-petclinic'
     }
 
     stages {
